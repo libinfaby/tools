@@ -1,0 +1,1090 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>tools.libinfaby.dev</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:ital,wght@0,300;0,400;0,500;0,600;1,300&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/sql-formatter@15.4.9/dist/sql-formatter.min.js"></script>
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --bg:       #0a0a0a;
+  --surface:  #111111;
+  --surface2: #181818;
+  --border:   #222222;
+  --border2:  #2e2e2e;
+  --text:     #e2e2e2;
+  --muted:    #555555;
+  --muted2:   #3a3a3a;
+  --accent:   #e2e2e2;
+  --dim:      #888888;
+  --mono:     'JetBrains Mono', monospace;
+  --sans:     'DM Sans', sans-serif;
+  --radius:   6px;
+
+  /* syntax */
+  --syn-kw:   #a8c0ff;
+  --syn-fn:   #ffc799;
+  --syn-str:  #b5f0b5;
+  --syn-num:  #ffb3ba;
+  --syn-cm:   #444444;
+}
+
+html, body {
+  height: 100%;
+  background: var(--bg);
+  color: var(--text);
+  font-family: var(--sans);
+  font-size: 14px;
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* ── Layout ── */
+.shell {
+  display: grid;
+  grid-template-columns: 220px 1fr;
+  grid-template-rows: 48px 1fr;
+  height: 100vh;
+  overflow: hidden;
+}
+
+/* ── Topbar ── */
+.topbar {
+  grid-column: 1 / -1;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 20px;
+  border-bottom: 1px solid var(--border);
+  flex-shrink: 0;
+}
+
+.wordmark {
+  font-family: var(--mono);
+  font-size: 13px;
+  font-weight: 400;
+  letter-spacing: -0.02em;
+  color: var(--dim);
+}
+
+.wordmark span {
+  color: var(--text);
+}
+
+.topbar-meta {
+  font-family: var(--mono);
+  font-size: 11px;
+  color: var(--muted);
+}
+
+/* ── Sidebar ── */
+.sidebar {
+  border-right: 1px solid var(--border);
+  display: flex;
+  flex-direction: column;
+  overflow-y: auto;
+  padding: 16px 0;
+}
+
+.sidebar-section {
+  padding: 0 12px 20px;
+}
+
+.sidebar-label {
+  font-family: var(--mono);
+  font-size: 10px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--muted);
+  padding: 0 8px;
+  margin-bottom: 6px;
+}
+
+.tool-btn {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  width: 100%;
+  padding: 8px 10px;
+  border-radius: var(--radius);
+  border: none;
+  background: transparent;
+  color: var(--dim);
+  font-family: var(--sans);
+  font-size: 13px;
+  font-weight: 400;
+  cursor: pointer;
+  text-align: left;
+  transition: background 0.1s, color 0.1s;
+  line-height: 1;
+}
+
+.tool-btn:hover {
+  background: var(--surface2);
+  color: var(--text);
+}
+
+.tool-btn.active {
+  background: var(--surface2);
+  color: var(--text);
+}
+
+.tool-btn .icon {
+  width: 28px;
+  height: 28px;
+  border-radius: 5px;
+  background: var(--surface2);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  font-size: 13px;
+  transition: background 0.1s;
+}
+
+.tool-btn.active .icon,
+.tool-btn:hover .icon {
+  background: var(--border2);
+}
+
+.tool-name { font-weight: 400; }
+.tool-tag {
+  font-family: var(--mono);
+  font-size: 9px;
+  color: var(--muted);
+  letter-spacing: 0.05em;
+  margin-left: auto;
+}
+
+/* ── Main ── */
+.main {
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+
+/* ── Tool container ── */
+.tool-view {
+  display: none;
+  flex-direction: column;
+  height: 100%;
+  overflow: hidden;
+}
+
+.tool-view.active { display: flex; }
+
+/* ── Tool header ── */
+.tool-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 20px;
+  height: 44px;
+  border-bottom: 1px solid var(--border);
+  flex-shrink: 0;
+}
+
+.tool-title {
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+}
+
+.tool-title h2 {
+  font-family: var(--mono);
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--text);
+}
+
+.tool-title .desc {
+  font-size: 12px;
+  color: var(--muted);
+}
+
+.header-actions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+/* ── Buttons ── */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 5px 12px;
+  border-radius: var(--radius);
+  font-family: var(--mono);
+  font-size: 11px;
+  font-weight: 400;
+  cursor: pointer;
+  transition: all 0.1s;
+  border: 1px solid var(--border2);
+  background: var(--surface);
+  color: var(--dim);
+  white-space: nowrap;
+}
+
+.btn:hover {
+  color: var(--text);
+  border-color: #3a3a3a;
+  background: var(--surface2);
+}
+
+.btn-primary {
+  background: var(--text);
+  border-color: var(--text);
+  color: #0a0a0a;
+  font-weight: 500;
+}
+
+.btn-primary:hover {
+  background: #cccccc;
+  border-color: #cccccc;
+  color: #0a0a0a;
+}
+
+.btn-primary:disabled {
+  opacity: 0.3;
+  cursor: not-allowed;
+}
+
+.btn svg { width: 12px; height: 12px; }
+
+/* ── Split pane ── */
+.split {
+  display: grid;
+  flex: 1;
+  overflow: hidden;
+}
+
+.split-2 { grid-template-columns: 1fr 1fr; }
+.split-1 { grid-template-columns: 1fr; }
+
+.pane {
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  position: relative;
+}
+
+.pane + .pane { border-left: 1px solid var(--border); }
+
+.pane-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 14px;
+  height: 36px;
+  border-bottom: 1px solid var(--border);
+  flex-shrink: 0;
+}
+
+.pane-label {
+  font-family: var(--mono);
+  font-size: 10px;
+  color: var(--muted);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
+.pane-body {
+  flex: 1;
+  overflow: auto;
+  position: relative;
+}
+
+.pane-body::-webkit-scrollbar { width: 3px; height: 3px; }
+.pane-body::-webkit-scrollbar-track { background: transparent; }
+.pane-body::-webkit-scrollbar-thumb { background: var(--border2); border-radius: 2px; }
+
+textarea.code-area {
+  width: 100%;
+  height: 100%;
+  background: transparent;
+  border: none;
+  outline: none;
+  color: var(--text);
+  font-family: var(--mono);
+  font-size: 12.5px;
+  line-height: 1.8;
+  padding: 14px 16px;
+  resize: none;
+  caret-color: var(--text);
+  tab-size: 2;
+}
+
+textarea.code-area::placeholder { color: var(--muted2); }
+textarea.code-area::selection { background: rgba(255,255,255,0.07); }
+
+pre.code-out {
+  font-family: var(--mono);
+  font-size: 12.5px;
+  line-height: 1.8;
+  padding: 14px 16px;
+  white-space: pre-wrap;
+  word-break: break-all;
+  color: var(--text);
+  min-height: 100%;
+}
+
+/* ── Syntax ── */
+.kw  { color: var(--syn-kw); }
+.fn  { color: var(--syn-fn); }
+.st  { color: var(--syn-str); }
+.nm  { color: var(--syn-num); }
+.cm  { color: var(--syn-cm); }
+
+/* ── Status bar ── */
+.statusbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 20px;
+  height: 28px;
+  border-top: 1px solid var(--border);
+  flex-shrink: 0;
+}
+
+.status-left, .status-right {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.stat {
+  font-family: var(--mono);
+  font-size: 10px;
+  color: var(--muted);
+}
+
+.stat span { color: var(--dim); }
+
+.copy-flash {
+  font-family: var(--mono);
+  font-size: 10px;
+  color: var(--dim);
+  opacity: 0;
+  transition: opacity 0.2s;
+}
+
+.copy-flash.show { opacity: 1; }
+
+/* ── Empty state ── */
+.empty {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  pointer-events: none;
+}
+
+.empty svg { opacity: 0.1; }
+.empty p {
+  font-family: var(--mono);
+  font-size: 11px;
+  color: var(--muted);
+  opacity: 0.6;
+}
+
+/* ── Options strip ── */
+.options-strip {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 0 14px;
+  height: 36px;
+  border-bottom: 1px solid var(--border);
+  flex-shrink: 0;
+}
+
+select.opt-select, input.opt-input {
+  background: transparent;
+  border: 1px solid var(--border2);
+  color: var(--dim);
+  font-family: var(--mono);
+  font-size: 11px;
+  padding: 3px 8px;
+  border-radius: 4px;
+  outline: none;
+  cursor: pointer;
+  transition: border-color 0.1s, color 0.1s;
+}
+
+select.opt-select:hover, input.opt-input:hover { border-color: #3a3a3a; color: var(--text); }
+select.opt-select:focus, input.opt-input:focus { border-color: #444; color: var(--text); }
+select.opt-select option { background: #1a1a1a; }
+
+.opt-label {
+  font-family: var(--mono);
+  font-size: 10px;
+  color: var(--muted);
+}
+
+.opt-sep {
+  width: 1px;
+  height: 14px;
+  background: var(--border2);
+}
+
+/* ── Column tool specifics ── */
+.col-controls {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+  padding: 16px;
+  height: 100%;
+  overflow: auto;
+}
+
+.col-section { display: flex; flex-direction: column; gap: 8px; }
+.col-section label {
+  font-family: var(--mono);
+  font-size: 10px;
+  color: var(--muted);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+textarea.col-area {
+  flex: 1;
+  min-height: 200px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  color: var(--text);
+  font-family: var(--mono);
+  font-size: 12.5px;
+  line-height: 1.8;
+  padding: 12px;
+  resize: none;
+  outline: none;
+  caret-color: var(--text);
+  transition: border-color 0.1s;
+}
+
+textarea.col-area::placeholder { color: var(--muted2); }
+textarea.col-area:focus { border-color: var(--border2); }
+
+.col-options {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.col-option {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.col-option label {
+  font-family: var(--mono);
+  font-size: 10px;
+  color: var(--muted);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  min-width: 70px;
+}
+
+input.opt-text {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  color: var(--text);
+  font-family: var(--mono);
+  font-size: 11px;
+  padding: 4px 8px;
+  outline: none;
+  width: 120px;
+  transition: border-color 0.1s;
+}
+
+input.opt-text:focus { border-color: var(--border2); }
+
+/* ── JSON tool ── */
+.json-error {
+  font-family: var(--mono);
+  font-size: 11px;
+  color: #ff9999;
+  padding: 8px 14px;
+  border-top: 1px solid #2a1a1a;
+  background: #110a0a;
+  flex-shrink: 0;
+  white-space: pre-wrap;
+}
+
+/* highlight */
+.jk { color: #aac4ff; }  /* key */
+.js { color: var(--syn-str); }  /* string value */
+.jn { color: var(--syn-num); }  /* number */
+.jb { color: #ffb3ba; }  /* bool/null */
+.jp { color: var(--muted); }  /* punctuation */
+
+/* ── Keyboard hint ── */
+.kbd {
+  font-family: var(--mono);
+  font-size: 10px;
+  color: var(--muted);
+  border: 1px solid var(--border2);
+  border-radius: 3px;
+  padding: 1px 5px;
+  background: var(--surface);
+}
+
+/* ── Responsive ── */
+@media (max-width: 680px) {
+  .shell { grid-template-columns: 1fr; grid-template-rows: 48px auto 1fr; }
+  .sidebar { flex-direction: row; border-right: none; border-bottom: 1px solid var(--border); padding: 8px; overflow-x: auto; }
+  .sidebar-section { padding: 0 4px; }
+  .sidebar-label { display: none; }
+  .tool-btn .tool-tag { display: none; }
+  .split-2 { grid-template-columns: 1fr; grid-template-rows: 1fr 1fr; }
+  .pane + .pane { border-left: none; border-top: 1px solid var(--border); }
+}
+</style>
+</head>
+<body>
+<div class="shell">
+
+  <!-- Topbar -->
+  <header class="topbar">
+    <div class="wordmark">tools.<span>libinfaby</span>.dev</div>
+    <div class="topbar-meta">dev tools</div>
+  </header>
+
+  <!-- Sidebar -->
+  <nav class="sidebar">
+    <div class="sidebar-section">
+      <div class="sidebar-label">Tools</div>
+
+      <button class="tool-btn active" onclick="openTool('sql')" id="nav-sql">
+        <span class="icon">⬡</span>
+        <span class="tool-name">SQL Formatter</span>
+        <span class="tool-tag">SQL</span>
+      </button>
+
+      <button class="tool-btn" onclick="openTool('col')" id="nav-col">
+        <span class="icon">⌥</span>
+        <span class="tool-name">Column → List</span>
+        <span class="tool-tag">TXT</span>
+      </button>
+
+      <button class="tool-btn" onclick="openTool('json')" id="nav-json">
+        <span class="icon">{ }</span>
+        <span class="tool-name">JSON Formatter</span>
+        <span class="tool-tag">JSON</span>
+      </button>
+
+    </div>
+  </nav>
+
+  <!-- Main -->
+  <main class="main">
+
+    <!-- ══════════════════════════════════════════
+         TOOL: SQL Formatter
+    ══════════════════════════════════════════ -->
+    <div class="tool-view active" id="tool-sql">
+      <div class="tool-header">
+        <div class="tool-title">
+          <h2>SQL Formatter</h2>
+          <span class="desc">Format & beautify SQL queries</span>
+        </div>
+        <div class="header-actions">
+          <span class="kbd">⌘↵</span>
+          <button class="btn" onclick="sqlLoadSample()">Sample</button>
+          <button class="btn" onclick="sqlClear()">Clear</button>
+          <button class="btn btn-primary" id="sqlRunBtn" onclick="sqlRun()">Format</button>
+        </div>
+      </div>
+
+      <div class="options-strip">
+        <span class="opt-label">Dialect</span>
+        <select class="opt-select" id="sqlDialect">
+          <option value="tsql" selected>MS SQL Server</option>
+          <option value="postgresql">PostgreSQL</option>
+          <option value="mysql">MySQL</option>
+          <option value="sqlite">SQLite</option>
+          <option value="plsql">Oracle PL/SQL</option>
+          <option value="sql">Generic SQL</option>
+        </select>
+        <div class="opt-sep"></div>
+        <span class="opt-label">Indent</span>
+        <select class="opt-select" id="sqlIndent">
+          <option value="2">2 spaces</option>
+          <option value="4">4 spaces</option>
+        </select>
+        <div class="opt-sep"></div>
+        <span class="opt-label">Keywords</span>
+        <select class="opt-select" id="sqlCase">
+          <option value="upper">UPPERCASE</option>
+          <option value="lower">lowercase</option>
+          <option value="preserve">Preserve</option>
+        </select>
+      </div>
+
+      <div class="split split-2" style="flex:1; overflow:hidden;">
+        <div class="pane">
+          <div class="pane-header">
+            <span class="pane-label">Input</span>
+            <span class="stat" id="sqlInStat">—</span>
+          </div>
+          <div class="pane-body">
+            <textarea class="code-area" id="sqlInput" spellcheck="false"
+              placeholder="-- paste your SQL here"></textarea>
+          </div>
+        </div>
+        <div class="pane">
+          <div class="pane-header">
+            <span class="pane-label">Output</span>
+            <div style="display:flex;gap:8px;align-items:center;">
+              <span class="copy-flash" id="sqlCopyFlash">copied</span>
+              <span class="stat" id="sqlOutStat">—</span>
+              <button class="btn" onclick="sqlCopy()" id="sqlCopyBtn" style="display:none;">Copy</button>
+            </div>
+          </div>
+          <div class="pane-body" id="sqlOutputWrap">
+            <div class="empty">
+              <svg width="40" height="40" viewBox="0 0 40 40" fill="none"><rect x="5" y="7" width="30" height="26" rx="3" stroke="currentColor" stroke-width="1.5"/><path d="M11 15h18M11 20h11M11 25h14" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+              <p>formatted output</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="statusbar">
+        <div class="status-left">
+          <span class="stat" id="sqlStatus">ready</span>
+        </div>
+        <div class="status-right"></div>
+      </div>
+    </div>
+
+    <!-- ══════════════════════════════════════════
+         TOOL: Column → Comma List
+    ══════════════════════════════════════════ -->
+    <div class="tool-view" id="tool-col">
+      <div class="tool-header">
+        <div class="tool-title">
+          <h2>Column → List</h2>
+          <span class="desc">Convert column data to delimited list</span>
+        </div>
+        <div class="header-actions">
+          <button class="btn" onclick="colClear()">Clear</button>
+          <button class="btn" onclick="colLoadSample()">Sample</button>
+          <button class="btn btn-primary" onclick="colConvert()">Convert</button>
+        </div>
+      </div>
+
+      <div class="col-controls">
+        <!-- Input -->
+        <div class="col-section">
+          <label>Input — one item per line</label>
+          <textarea class="col-area" id="colInput" spellcheck="false"
+            placeholder="patient_id&#10;first_name&#10;last_name&#10;date_of_birth&#10;ward_code"></textarea>
+        </div>
+
+        <!-- Output + Options -->
+        <div class="col-section">
+          <label>Output</label>
+
+          <div class="col-options">
+            <div class="col-option">
+              <label>Delimiter</label>
+              <input class="opt-text" id="colDelim" value=", " placeholder=", " oninput="colConvert()">
+            </div>
+            <div class="col-option">
+              <label>Wrap with</label>
+              <input class="opt-text" id="colWrapL" value="'" placeholder="prefix" style="width:52px;" oninput="colConvert()">
+              <span style="font-family:var(--mono);font-size:11px;color:var(--muted)">···</span>
+              <input class="opt-text" id="colWrapR" value="'" placeholder="suffix" style="width:52px;" oninput="colConvert()">
+            </div>
+            <div class="col-option">
+              <label>Trim</label>
+              <input type="checkbox" id="colTrim" checked onchange="colConvert()" style="accent-color:#888;">
+              <span style="font-family:var(--mono);font-size:11px;color:var(--muted);">trim whitespace</span>
+            </div>
+            <div class="col-option">
+              <label>Skip empty</label>
+              <input type="checkbox" id="colSkipEmpty" checked onchange="colConvert()" style="accent-color:#888;">
+              <span style="font-family:var(--mono);font-size:11px;color:var(--muted);">skip blank lines</span>
+            </div>
+          </div>
+
+          <textarea class="col-area" id="colOutput" spellcheck="false" readonly
+            placeholder="result will appear here…" style="margin-top:4px;"></textarea>
+
+          <div style="display:flex;align-items:center;justify-content:space-between;">
+            <span class="stat" id="colStat">—</span>
+            <div style="display:flex;align-items:center;gap:8px;">
+              <span class="copy-flash" id="colCopyFlash">copied</span>
+              <button class="btn" onclick="colCopy()">Copy</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ══════════════════════════════════════════
+         TOOL: JSON Formatter
+    ══════════════════════════════════════════ -->
+    <div class="tool-view" id="tool-json">
+      <div class="tool-header">
+        <div class="tool-title">
+          <h2>JSON Formatter</h2>
+          <span class="desc">Validate, format & highlight JSON</span>
+        </div>
+        <div class="header-actions">
+          <span class="kbd">⌘↵</span>
+          <button class="btn" onclick="jsonLoadSample()">Sample</button>
+          <button class="btn" onclick="jsonClear()">Clear</button>
+          <button class="btn btn-primary" onclick="jsonRun()">Format</button>
+        </div>
+      </div>
+
+      <div class="options-strip">
+        <span class="opt-label">Indent</span>
+        <select class="opt-select" id="jsonIndent" onchange="jsonRun()">
+          <option value="2">2 spaces</option>
+          <option value="4">4 spaces</option>
+          <option value="tab">Tab</option>
+        </select>
+        <div class="opt-sep"></div>
+        <span class="opt-label">Sort keys</span>
+        <select class="opt-select" id="jsonSort" onchange="jsonRun()">
+          <option value="no">No</option>
+          <option value="yes">Yes</option>
+        </select>
+        <div class="opt-sep"></div>
+        <span class="opt-label">Minify</span>
+        <select class="opt-select" id="jsonMinify" onchange="jsonRun()">
+          <option value="no">No</option>
+          <option value="yes">Yes</option>
+        </select>
+      </div>
+
+      <div class="split split-2" style="flex:1;overflow:hidden;">
+        <div class="pane">
+          <div class="pane-header">
+            <span class="pane-label">Input</span>
+            <span class="stat" id="jsonInStat">—</span>
+          </div>
+          <div class="pane-body">
+            <textarea class="code-area" id="jsonInput" spellcheck="false"
+              placeholder='{"paste": "your JSON here"}'></textarea>
+          </div>
+        </div>
+        <div class="pane" style="flex-direction:column;">
+          <div class="pane-header">
+            <span class="pane-label">Output</span>
+            <div style="display:flex;gap:8px;align-items:center;">
+              <span class="copy-flash" id="jsonCopyFlash">copied</span>
+              <span class="stat" id="jsonOutStat">—</span>
+              <button class="btn" onclick="jsonCopy()" id="jsonCopyBtn" style="display:none;">Copy</button>
+            </div>
+          </div>
+          <div class="pane-body" id="jsonOutputWrap" style="flex:1;">
+            <div class="empty" id="jsonEmpty">
+              <svg width="40" height="40" viewBox="0 0 40 40" fill="none"><path d="M14 8C11 8 9 10 9 13v4c0 2-1 3-3 3 2 0 3 1 3 3v4c0 3 2 5 5 5M26 8c3 0 5 2 5 5v4c0 2 1 3 3 3-2 0-3 1-3 3v4c0 3-2 5-5 5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+              <p>formatted output</p>
+            </div>
+            <pre class="code-out" id="jsonOutput" style="display:none;"></pre>
+          </div>
+          <div id="jsonErrorBar" class="json-error" style="display:none;"></div>
+        </div>
+      </div>
+
+      <div class="statusbar">
+        <div class="status-left">
+          <span class="stat" id="jsonStatus">ready</span>
+        </div>
+        <div class="status-right"></div>
+      </div>
+    </div>
+
+  </main>
+</div>
+
+<script>
+// ═══════════════════════════════════════════════════════
+// Navigation
+// ═══════════════════════════════════════════════════════
+function openTool(id) {
+  document.querySelectorAll('.tool-view').forEach(t => t.classList.remove('active'));
+  document.querySelectorAll('.tool-btn').forEach(b => b.classList.remove('active'));
+  document.getElementById('tool-' + id).classList.add('active');
+  document.getElementById('nav-' + id).classList.add('active');
+}
+
+// ═══════════════════════════════════════════════════════
+// Utility
+// ═══════════════════════════════════════════════════════
+function esc(s) {
+  return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+}
+
+function flash(id) {
+  const el = document.getElementById(id);
+  el.classList.add('show');
+  setTimeout(() => el.classList.remove('show'), 1600);
+}
+
+function copyText(text, flashId) {
+  navigator.clipboard.writeText(text).then(() => flash(flashId));
+}
+
+function countLines(s) { return s ? s.split('\n').length : 0; }
+function countChars(s) { return s ? s.length : 0; }
+
+// ═══════════════════════════════════════════════════════
+// SQL Formatter
+// ═══════════════════════════════════════════════════════
+const sqlInput  = document.getElementById('sqlInput');
+const sqlOutW   = document.getElementById('sqlOutputWrap');
+const sqlInStat = document.getElementById('sqlInStat');
+const sqlOutStat= document.getElementById('sqlOutStat');
+const sqlStatus = document.getElementById('sqlStatus');
+
+let formattedSQL = '';
+
+sqlInput.addEventListener('input', () => {
+  const v = sqlInput.value;
+  sqlInStat.textContent = v ? `${countLines(v)}L · ${countChars(v)}c` : '—';
+});
+
+function sqlRun() {
+  const raw = sqlInput.value.trim();
+  if (!raw) return;
+  const dialect = document.getElementById('sqlDialect').value;
+  const indent  = parseInt(document.getElementById('sqlIndent').value);
+  const kcase   = document.getElementById('sqlCase').value;
+
+  let result;
+  try {
+    result = sqlFormatter.format(raw, {
+      language: dialect,
+      tabWidth: indent,
+      keywordCase: kcase,
+      linesBetweenQueries: 2,
+    });
+  } catch(e) {
+    result = raw;
+  }
+
+  formattedSQL = result;
+  sqlOutW.innerHTML = `<pre class="code-out">${sqlHighlight(esc(result))}</pre>`;
+  document.getElementById('sqlCopyBtn').style.display = 'inline-flex';
+  sqlOutStat.textContent = `${countLines(result)}L · ${countChars(result)}c`;
+  sqlStatus.textContent = `formatted · ${dialect}`;
+}
+
+function sqlCopy() { copyText(formattedSQL, 'sqlCopyFlash'); }
+
+function sqlClear() {
+  sqlInput.value = '';
+  sqlInStat.textContent = '—';
+  sqlOutStat.textContent = '—';
+  sqlStatus.textContent = 'ready';
+  formattedSQL = '';
+  document.getElementById('sqlCopyBtn').style.display = 'none';
+  sqlOutW.innerHTML = `<div class="empty"><svg width="40" height="40" viewBox="0 0 40 40" fill="none"><rect x="5" y="7" width="30" height="26" rx="3" stroke="currentColor" stroke-width="1.5"/><path d="M11 15h18M11 20h11M11 25h14" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg><p>formatted output</p></div>`;
+}
+
+function sqlLoadSample() {
+  sqlInput.value = `WITH monthly_revenue AS (SELECT p.category, FORMAT(s.sale_date,'yyyy-MM') AS sale_month, SUM(s.quantity*s.unit_price) AS revenue, COUNT(DISTINCT s.patient_id) AS unique_patients FROM pharmacy_sales s INNER JOIN products p ON s.product_id=p.id WHERE s.sale_date>=DATEADD(MONTH,-12,GETDATE()) AND s.is_cancelled=0 GROUP BY p.category,FORMAT(s.sale_date,'yyyy-MM')), ranked AS (SELECT *,ROW_NUMBER() OVER (PARTITION BY sale_month ORDER BY revenue DESC) AS rn FROM monthly_revenue) SELECT category,sale_month,revenue,unique_patients,ROUND(revenue/unique_patients,2) AS revenue_per_patient FROM ranked WHERE rn<=5 ORDER BY sale_month DESC,revenue DESC;`;
+  sqlInStat.textContent = `1L · ${sqlInput.value.length}c`;
+}
+
+function sqlHighlight(sql) {
+  const kw  = /\b(SELECT|FROM|WHERE|JOIN|LEFT|RIGHT|INNER|OUTER|FULL|ON|AND|OR|NOT|IN|EXISTS|BETWEEN|LIKE|IS|NULL|AS|DISTINCT|GROUP\s+BY|ORDER\s+BY|HAVING|LIMIT|OFFSET|INSERT|INTO|VALUES|UPDATE|SET|DELETE|CREATE|TABLE|ALTER|DROP|INDEX|VIEW|WITH|UNION|ALL|CASE|WHEN|THEN|ELSE|END|BY|ASC|DESC|TOP|NOLOCK|CROSS|APPLY|OVER|PARTITION|DECLARE|BEGIN|COMMIT|ROLLBACK|TRANSACTION|EXEC|EXECUTE|PROCEDURE|FUNCTION|TRIGGER|PRIMARY\s+KEY|FOREIGN\s+KEY|REFERENCES|CONSTRAINT|DEFAULT|CHECK|UNIQUE|NOT\s+NULL|ROW_NUMBER|RANK|DENSE_RANK|COALESCE|ISNULL|NULLIF|CAST|CONVERT)\b/gi;
+  const fn  = /\b(COUNT|SUM|AVG|MIN|MAX|LEN|LENGTH|SUBSTRING|CHARINDEX|REPLACE|UPPER|LOWER|LTRIM|RTRIM|TRIM|GETDATE|GETUTCDATE|DATEADD|DATEDIFF|FORMAT|CONCAT|STRING_AGG|YEAR|MONTH|DAY|NOW|DATE|IIF|ROUND|ABS|FLOOR|CEILING)\s*(?=\()/gi;
+  const str = /('(?:[^']|'')*')/g;
+  const num = /\b(\d+(?:\.\d+)?)\b/g;
+  const cm  = /(--[^\n]*|\/\*[\s\S]*?\*\/)/g;
+  return sql
+    .replace(cm,  m => `<span class="cm">${m}</span>`)
+    .replace(str, m => `<span class="st">${m}</span>`)
+    .replace(fn,  m => `<span class="fn">${m}</span>`)
+    .replace(kw,  m => `<span class="kw">${m}</span>`)
+    .replace(num, m => `<span class="nm">${m}</span>`);
+}
+
+// ═══════════════════════════════════════════════════════
+// Column → List
+// ═══════════════════════════════════════════════════════
+const colInput  = document.getElementById('colInput');
+const colOutput = document.getElementById('colOutput');
+const colStat   = document.getElementById('colStat');
+
+colInput.addEventListener('input', colConvert);
+
+function colConvert() {
+  const raw       = colInput.value;
+  const delim     = document.getElementById('colDelim').value;
+  const wrapL     = document.getElementById('colWrapL').value;
+  const wrapR     = document.getElementById('colWrapR').value;
+  const trim      = document.getElementById('colTrim').checked;
+  const skipEmpty = document.getElementById('colSkipEmpty').checked;
+
+  let lines = raw.split('\n');
+  if (trim)      lines = lines.map(l => l.trim());
+  if (skipEmpty) lines = lines.filter(l => l.length > 0);
+
+  const result = lines.map(l => `${wrapL}${l}${wrapR}`).join(delim);
+  colOutput.value = result;
+  colStat.textContent = lines.length > 0 ? `${lines.length} items` : '—';
+}
+
+function colCopy() {
+  if (colOutput.value) copyText(colOutput.value, 'colCopyFlash');
+}
+
+function colClear() {
+  colInput.value = '';
+  colOutput.value = '';
+  colStat.textContent = '—';
+}
+
+function colLoadSample() {
+  colInput.value = `patient_id\nfirst_name\nlast_name\ndate_of_birth\nward_code\nadmission_date\ndischarge_date`;
+  colConvert();
+}
+
+// ═══════════════════════════════════════════════════════
+// JSON Formatter
+// ═══════════════════════════════════════════════════════
+const jsonInput   = document.getElementById('jsonInput');
+const jsonOut     = document.getElementById('jsonOutput');
+const jsonEmpty   = document.getElementById('jsonEmpty');
+const jsonErrBar  = document.getElementById('jsonErrorBar');
+const jsonInStat  = document.getElementById('jsonInStat');
+const jsonOutStat = document.getElementById('jsonOutStat');
+const jsonStatus  = document.getElementById('jsonStatus');
+
+let formattedJSON = '';
+
+jsonInput.addEventListener('input', () => {
+  const v = jsonInput.value;
+  jsonInStat.textContent = v ? `${countLines(v)}L · ${countChars(v)}c` : '—';
+  // live validate
+  if (v.trim()) {
+    try { JSON.parse(v); jsonErrBar.style.display = 'none'; }
+    catch(e) { /* don't spam errors on input */ }
+  }
+});
+
+function jsonRun() {
+  const raw = jsonInput.value.trim();
+  if (!raw) return;
+
+  const indentVal = document.getElementById('jsonIndent').value;
+  const sortKeys  = document.getElementById('jsonSort').value === 'yes';
+  const minify    = document.getElementById('jsonMinify').value === 'yes';
+  const indent    = indentVal === 'tab' ? '\t' : parseInt(indentVal);
+
+  let parsed;
+  try {
+    parsed = JSON.parse(raw);
+  } catch(e) {
+    jsonOut.style.display = 'none';
+    jsonEmpty.style.display = 'none';
+    jsonErrBar.style.display = 'block';
+    jsonErrBar.textContent = '✗ ' + e.message;
+    jsonStatus.textContent = 'invalid JSON';
+    document.getElementById('jsonCopyBtn').style.display = 'none';
+    return;
+  }
+
+  jsonErrBar.style.display = 'none';
+
+  if (sortKeys) parsed = sortObjKeys(parsed);
+
+  let result;
+  if (minify) {
+    result = JSON.stringify(parsed);
+  } else {
+    result = JSON.stringify(parsed, null, indent);
+  }
+
+  formattedJSON = result;
+  jsonOut.innerHTML = jsonHighlight(esc(result));
+  jsonOut.style.display = 'block';
+  jsonEmpty.style.display = 'none';
+  document.getElementById('jsonCopyBtn').style.display = 'inline-flex';
+  jsonOutStat.textContent = `${countLines(result)}L · ${countChars(result)}c`;
+  jsonStatus.textContent = `formatted · valid JSON`;
+}
+
+function sortObjKeys(obj) {
+  if (Array.isArray(obj)) return obj.map(sortObjKeys);
+  if (obj !== null && typeof obj === 'object') {
+    return Object.keys(obj).sort().reduce((acc, k) => {
+      acc[k] = sortObjKeys(obj[k]); return acc;
+    }, {});
+  }
+  return obj;
+}
+
+function jsonHighlight(s) {
+  return s.replace(
+    /("(?:[^"\\]|\\.)*")(\s*:)|("(?:[^"\\]|\\.)*")|(true|false|null)|(-?\d+(?:\.\d+)?(?:[eE][+-]?\d+)?)/g,
+    (m, key, colon, str, kw, num) => {
+      if (key && colon) return `<span class="jk">${key}</span><span class="jp">${colon}</span>`;
+      if (str)          return `<span class="js">${str}</span>`;
+      if (kw)           return `<span class="jb">${kw}</span>`;
+      if (num)          return `<span class="jn">${num}</span>`;
+      return m;
+    }
+  );
+}
+
+function jsonCopy() { copyText(formattedJSON, 'jsonCopyFlash'); }
+
+function jsonClear() {
+  jsonInput.value = '';
+  formattedJSON = '';
+  jsonOut.innerHTML = '';
+  jsonOut.style.display = 'none';
+  jsonEmpty.style.display = 'flex';
+  jsonErrBar.style.display = 'none';
+  jsonInStat.textContent = '—';
+  jsonOutStat.textContent = '—';
+  jsonStatus.textContent = 'ready';
+  document.getElementById('jsonCopyBtn').style.display = 'none';
+}
+
+function jsonLoadSample() {
+  jsonInput.value = `{"patients":[{"id":1001,"name":"Rajan Pillai","dob":"1985-04-12","ward":"ICU","active":true,"vitals":{"bp":"120/80","temp":98.6,"spo2":99}},{"id":1002,"name":"Meera Nair","dob":"1990-07-23","ward":"General","active":false,"vitals":{"bp":"110/70","temp":99.1,"spo2":97}}],"total":2,"generated_at":"2025-03-28T10:00:00Z"}`;
+  jsonInStat.textContent = `1L · ${jsonInput.value.length}c`;
+  jsonRun();
+}
+
+// ═══════════════════════════════════════════════════════
+// Keyboard shortcuts
+// ═══════════════════════════════════════════════════════
+document.addEventListener('keydown', e => {
+  if (e.metaKey || e.ctrlKey) {
+    if (e.key === 'Enter') {
+      e.preventDefault();
+      const active = document.querySelector('.tool-view.active');
+      if (!active) return;
+      const id = active.id;
+      if (id === 'tool-sql')  sqlRun();
+      if (id === 'tool-json') jsonRun();
+      if (id === 'tool-col')  colConvert();
+    }
+  }
+});
+</script>
+</body>
+</html>
