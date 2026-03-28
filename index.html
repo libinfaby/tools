@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>tools.libinfaby.dev</title>
+<title>tools</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:ital,wght@0,300;0,400;0,500;0,600;1,300&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
@@ -39,7 +39,7 @@ html, body {
   background: var(--bg);
   color: var(--text);
   font-family: var(--sans);
-  font-size: 14px;
+  font-size: 16px;
   line-height: 1.6;
   -webkit-font-smoothing: antialiased;
 }
@@ -66,7 +66,7 @@ html, body {
 
 .wordmark {
   font-family: var(--mono);
-  font-size: 13px;
+  font-size: 15px;
   font-weight: 400;
   letter-spacing: -0.02em;
   color: var(--dim);
@@ -78,7 +78,7 @@ html, body {
 
 .topbar-meta {
   font-family: var(--mono);
-  font-size: 11px;
+  font-size: 13px;
   color: var(--muted);
 }
 
@@ -97,7 +97,7 @@ html, body {
 
 .sidebar-label {
   font-family: var(--mono);
-  font-size: 10px;
+  font-size: 12px;
   letter-spacing: 0.12em;
   text-transform: uppercase;
   color: var(--muted);
@@ -116,7 +116,7 @@ html, body {
   background: transparent;
   color: var(--dim);
   font-family: var(--sans);
-  font-size: 13px;
+  font-size: 15px;
   font-weight: 400;
   cursor: pointer;
   text-align: left;
@@ -143,7 +143,7 @@ html, body {
   align-items: center;
   justify-content: center;
   flex-shrink: 0;
-  font-size: 13px;
+  font-size: 15px;
   transition: background 0.1s;
 }
 
@@ -155,7 +155,7 @@ html, body {
 .tool-name { font-weight: 400; }
 .tool-tag {
   font-family: var(--mono);
-  font-size: 9px;
+  font-size: 11px;
   color: var(--muted);
   letter-spacing: 0.05em;
   margin-left: auto;
@@ -187,30 +187,37 @@ html, body {
   height: 44px;
   border-bottom: 1px solid var(--border);
   flex-shrink: 0;
+  gap: 8px;
 }
 
 .tool-title {
   display: flex;
   align-items: baseline;
   gap: 8px;
+  min-width: 0;
 }
 
 .tool-title h2 {
   font-family: var(--mono);
-  font-size: 13px;
+  font-size: 15px;
   font-weight: 500;
   color: var(--text);
+  white-space: nowrap;
 }
 
 .tool-title .desc {
-  font-size: 12px;
+  font-size: 14px;
   color: var(--muted);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .header-actions {
   display: flex;
   align-items: center;
   gap: 8px;
+  flex-shrink: 0;
 }
 
 /* ── Buttons ── */
@@ -221,7 +228,7 @@ html, body {
   padding: 5px 12px;
   border-radius: var(--radius);
   font-family: var(--mono);
-  font-size: 11px;
+  font-size: 13px;
   font-weight: 400;
   cursor: pointer;
   transition: all 0.1s;
@@ -229,12 +236,17 @@ html, body {
   background: var(--surface);
   color: var(--dim);
   white-space: nowrap;
+  -webkit-tap-highlight-color: transparent;
 }
 
 .btn:hover {
   color: var(--text);
   border-color: #3a3a3a;
   background: var(--surface2);
+}
+
+.btn:active {
+  opacity: 0.75;
 }
 
 .btn-primary {
@@ -288,7 +300,7 @@ html, body {
 
 .pane-label {
   font-family: var(--mono);
-  font-size: 10px;
+  font-size: 12px;
   color: var(--muted);
   letter-spacing: 0.1em;
   text-transform: uppercase;
@@ -298,6 +310,7 @@ html, body {
   flex: 1;
   overflow: auto;
   position: relative;
+  -webkit-overflow-scrolling: touch;
 }
 
 .pane-body::-webkit-scrollbar { width: 3px; height: 3px; }
@@ -312,12 +325,14 @@ textarea.code-area {
   outline: none;
   color: var(--text);
   font-family: var(--mono);
-  font-size: 12.5px;
+  font-size: 14.5px;
   line-height: 1.8;
   padding: 14px 16px;
   resize: none;
   caret-color: var(--text);
   tab-size: 2;
+  -webkit-appearance: none;
+  appearance: none;
 }
 
 textarea.code-area::placeholder { color: var(--muted2); }
@@ -325,7 +340,7 @@ textarea.code-area::selection { background: rgba(255,255,255,0.07); }
 
 pre.code-out {
   font-family: var(--mono);
-  font-size: 12.5px;
+  font-size: 14.5px;
   line-height: 1.8;
   padding: 14px 16px;
   white-space: pre-wrap;
@@ -360,7 +375,7 @@ pre.code-out {
 
 .stat {
   font-family: var(--mono);
-  font-size: 10px;
+  font-size: 12px;
   color: var(--muted);
 }
 
@@ -368,7 +383,7 @@ pre.code-out {
 
 .copy-flash {
   font-family: var(--mono);
-  font-size: 10px;
+  font-size: 12px;
   color: var(--dim);
   opacity: 0;
   transition: opacity 0.2s;
@@ -391,7 +406,7 @@ pre.code-out {
 .empty svg { opacity: 0.1; }
 .empty p {
   font-family: var(--mono);
-  font-size: 11px;
+  font-size: 13px;
   color: var(--muted);
   opacity: 0.6;
 }
@@ -405,19 +420,26 @@ pre.code-out {
   height: 36px;
   border-bottom: 1px solid var(--border);
   flex-shrink: 0;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
 }
+
+.options-strip::-webkit-scrollbar { display: none; }
 
 select.opt-select, input.opt-input {
   background: transparent;
   border: 1px solid var(--border2);
   color: var(--dim);
   font-family: var(--mono);
-  font-size: 11px;
+  font-size: 13px;
   padding: 3px 8px;
   border-radius: 4px;
   outline: none;
   cursor: pointer;
   transition: border-color 0.1s, color 0.1s;
+  -webkit-appearance: none;
+  appearance: none;
+  flex-shrink: 0;
 }
 
 select.opt-select:hover, input.opt-input:hover { border-color: #3a3a3a; color: var(--text); }
@@ -426,14 +448,17 @@ select.opt-select option { background: #1a1a1a; }
 
 .opt-label {
   font-family: var(--mono);
-  font-size: 10px;
+  font-size: 12px;
   color: var(--muted);
+  white-space: nowrap;
+  flex-shrink: 0;
 }
 
 .opt-sep {
   width: 1px;
   height: 14px;
   background: var(--border2);
+  flex-shrink: 0;
 }
 
 /* ── Column tool specifics ── */
@@ -444,12 +469,13 @@ select.opt-select option { background: #1a1a1a; }
   padding: 16px;
   height: 100%;
   overflow: auto;
+  -webkit-overflow-scrolling: touch;
 }
 
 .col-section { display: flex; flex-direction: column; gap: 8px; }
 .col-section label {
   font-family: var(--mono);
-  font-size: 10px;
+  font-size: 12px;
   color: var(--muted);
   letter-spacing: 0.08em;
   text-transform: uppercase;
@@ -463,13 +489,15 @@ textarea.col-area {
   border-radius: var(--radius);
   color: var(--text);
   font-family: var(--mono);
-  font-size: 12.5px;
+  font-size: 14.5px;
   line-height: 1.8;
   padding: 12px;
   resize: none;
   outline: none;
   caret-color: var(--text);
   transition: border-color 0.1s;
+  -webkit-appearance: none;
+  appearance: none;
 }
 
 textarea.col-area::placeholder { color: var(--muted2); }
@@ -485,11 +513,12 @@ textarea.col-area:focus { border-color: var(--border2); }
   display: flex;
   align-items: center;
   gap: 10px;
+  flex-wrap: wrap;
 }
 
 .col-option label {
   font-family: var(--mono);
-  font-size: 10px;
+  font-size: 12px;
   color: var(--muted);
   text-transform: uppercase;
   letter-spacing: 0.08em;
@@ -502,7 +531,7 @@ input.opt-text {
   border-radius: 4px;
   color: var(--text);
   font-family: var(--mono);
-  font-size: 11px;
+  font-size: 13px;
   padding: 4px 8px;
   outline: none;
   width: 120px;
@@ -514,7 +543,7 @@ input.opt-text:focus { border-color: var(--border2); }
 /* ── JSON tool ── */
 .json-error {
   font-family: var(--mono);
-  font-size: 11px;
+  font-size: 13px;
   color: #ff9999;
   padding: 8px 14px;
   border-top: 1px solid #2a1a1a;
@@ -524,16 +553,16 @@ input.opt-text:focus { border-color: var(--border2); }
 }
 
 /* highlight */
-.jk { color: #aac4ff; }  /* key */
-.js { color: var(--syn-str); }  /* string value */
-.jn { color: var(--syn-num); }  /* number */
-.jb { color: #ffb3ba; }  /* bool/null */
-.jp { color: var(--muted); }  /* punctuation */
+.jk { color: #aac4ff; }
+.js { color: var(--syn-str); }
+.jn { color: var(--syn-num); }
+.jb { color: #ffb3ba; }
+.jp { color: var(--muted); }
 
 /* ── Keyboard hint ── */
 .kbd {
   font-family: var(--mono);
-  font-size: 10px;
+  font-size: 12px;
   color: var(--muted);
   border: 1px solid var(--border2);
   border-radius: 3px;
@@ -541,15 +570,125 @@ input.opt-text:focus { border-color: var(--border2); }
   background: var(--surface);
 }
 
-/* ── Responsive ── */
+/* ══════════════════════════════════════════
+   MOBILE — bottom nav approach
+   ══════════════════════════════════════════ */
 @media (max-width: 680px) {
-  .shell { grid-template-columns: 1fr; grid-template-rows: 48px auto 1fr; }
-  .sidebar { flex-direction: row; border-right: none; border-bottom: 1px solid var(--border); padding: 8px; overflow-x: auto; }
-  .sidebar-section { padding: 0 4px; }
-  .sidebar-label { display: none; }
-  .tool-btn .tool-tag { display: none; }
-  .split-2 { grid-template-columns: 1fr; grid-template-rows: 1fr 1fr; }
-  .pane + .pane { border-left: none; border-top: 1px solid var(--border); }
+
+  /* Stack: topbar / main / bottom-nav */
+  .shell {
+    display: flex;
+    flex-direction: column;
+    height: 100dvh;   /* dynamic viewport height for iOS */
+    overflow: hidden;
+  }
+
+  .topbar {
+    height: 44px;
+    padding: 0 16px;
+    flex-shrink: 0;
+  }
+
+  /* Hide the sidebar; replaced by bottom nav */
+  .sidebar { display: none; }
+
+  /* Main fills remaining space above bottom nav */
+  .main {
+    flex: 1;
+    min-height: 0;
+    overflow: hidden;
+  }
+
+  /* Bottom navigation bar */
+  .mobile-nav {
+    display: flex;
+    border-top: 1px solid var(--border);
+    flex-shrink: 0;
+    background: var(--bg);
+  }
+
+  .mobile-nav-btn {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 4px;
+    padding: 8px 4px 10px;
+    background: transparent;
+    border: none;
+    color: var(--muted);
+    font-family: var(--mono);
+    font-size: 11px;
+    cursor: pointer;
+    -webkit-tap-highlight-color: transparent;
+    transition: color 0.1s;
+    border-top: 2px solid transparent;
+    margin-top: -1px;
+  }
+
+  .mobile-nav-btn.active {
+    color: var(--text);
+    border-top-color: var(--text);
+  }
+
+  .mobile-nav-btn .nav-icon {
+    font-size: 17px;
+    line-height: 1;
+  }
+
+  /* Tool header: tighter on mobile */
+  .tool-header {
+    padding: 0 12px;
+    height: 40px;
+  }
+
+  .tool-title .desc { display: none; }
+
+  .header-actions .kbd { display: none; }
+
+  /* Options strip: scrollable horizontally */
+  .options-strip {
+    padding: 0 12px;
+  }
+
+  /* SQL & JSON: stack panes vertically, equal halves */
+  .split-2 {
+    grid-template-columns: 1fr;
+    grid-template-rows: 1fr 1fr;
+  }
+
+  .pane + .pane {
+    border-left: none;
+    border-top: 1px solid var(--border);
+  }
+
+  /* Column tool: stack vertically */
+  .col-controls {
+    grid-template-columns: 1fr;
+    grid-template-rows: auto auto;
+    padding: 12px;
+    gap: 12px;
+  }
+
+  textarea.col-area {
+    min-height: 120px;
+  }
+
+  .statusbar {
+    padding: 0 12px;
+  }
+}
+
+/* Very narrow screens */
+@media (max-width: 380px) {
+  .tool-header {
+    height: 38px;
+  }
+  .btn {
+    padding: 5px 9px;
+    font-size: 12px;
+  }
 }
 </style>
 </head>
@@ -558,11 +697,11 @@ input.opt-text:focus { border-color: var(--border2); }
 
   <!-- Topbar -->
   <header class="topbar">
-    <div class="wordmark">tools.<span>libinfaby</span>.dev</div>
-    <div class="topbar-meta">dev tools</div>
+    <div class="wordmark"><span>tools</span></div>
+    <div class="topbar-meta">everyday dev tools</div>
   </header>
 
-  <!-- Sidebar -->
+  <!-- Sidebar (desktop) -->
   <nav class="sidebar">
     <div class="sidebar-section">
       <div class="sidebar-label">Tools</div>
@@ -611,21 +750,21 @@ input.opt-text:focus { border-color: var(--border2); }
       <div class="options-strip">
         <span class="opt-label">Dialect</span>
         <select class="opt-select" id="sqlDialect">
-          <option value="tsql" selected>MS SQL Server</option>
+          <option value="tsql" selected>MS SQL</option>
           <option value="postgresql">PostgreSQL</option>
           <option value="mysql">MySQL</option>
           <option value="sqlite">SQLite</option>
-          <option value="plsql">Oracle PL/SQL</option>
-          <option value="sql">Generic SQL</option>
+          <option value="plsql">PL/SQL</option>
+          <option value="sql">Generic</option>
         </select>
         <div class="opt-sep"></div>
         <span class="opt-label">Indent</span>
         <select class="opt-select" id="sqlIndent">
-          <option value="2">2 spaces</option>
-          <option value="4">4 spaces</option>
+          <option value="2">2 Spaces</option>
+          <option value="4">4 Spaces</option>
         </select>
         <div class="opt-sep"></div>
-        <span class="opt-label">Keywords</span>
+        <span class="opt-label">KW</span>
         <select class="opt-select" id="sqlCase">
           <option value="upper">UPPERCASE</option>
           <option value="lower">lowercase</option>
@@ -691,7 +830,7 @@ input.opt-text:focus { border-color: var(--border2); }
         <div class="col-section">
           <label>Input — one item per line</label>
           <textarea class="col-area" id="colInput" spellcheck="false"
-            placeholder="patient_id&#10;first_name&#10;last_name&#10;date_of_birth&#10;ward_code"></textarea>
+            placeholder="paste your LIST here"></textarea>
         </div>
 
         <!-- Output + Options -->
@@ -706,18 +845,18 @@ input.opt-text:focus { border-color: var(--border2); }
             <div class="col-option">
               <label>Wrap with</label>
               <input class="opt-text" id="colWrapL" value="'" placeholder="prefix" style="width:52px;" oninput="colConvert()">
-              <span style="font-family:var(--mono);font-size:11px;color:var(--muted)">···</span>
+              <span style="font-family:var(--mono);font-size:13px;color:var(--muted)">···</span>
               <input class="opt-text" id="colWrapR" value="'" placeholder="suffix" style="width:52px;" oninput="colConvert()">
             </div>
             <div class="col-option">
               <label>Trim</label>
               <input type="checkbox" id="colTrim" checked onchange="colConvert()" style="accent-color:#888;">
-              <span style="font-family:var(--mono);font-size:11px;color:var(--muted);">trim whitespace</span>
+              <span style="font-family:var(--mono);font-size:13px;color:var(--muted);">trim whitespace</span>
             </div>
             <div class="col-option">
               <label>Skip empty</label>
               <input type="checkbox" id="colSkipEmpty" checked onchange="colConvert()" style="accent-color:#888;">
-              <span style="font-family:var(--mono);font-size:11px;color:var(--muted);">skip blank lines</span>
+              <span style="font-family:var(--mono);font-size:13px;color:var(--muted);">skip blank lines</span>
             </div>
           </div>
 
@@ -755,8 +894,8 @@ input.opt-text:focus { border-color: var(--border2); }
       <div class="options-strip">
         <span class="opt-label">Indent</span>
         <select class="opt-select" id="jsonIndent" onchange="jsonRun()">
-          <option value="2">2 spaces</option>
-          <option value="4">4 spaces</option>
+          <option value="2">2 sp</option>
+          <option value="4">4 sp</option>
           <option value="tab">Tab</option>
         </select>
         <div class="opt-sep"></div>
@@ -813,17 +952,54 @@ input.opt-text:focus { border-color: var(--border2); }
     </div>
 
   </main>
+
+  <!-- Bottom nav (mobile only) -->
+  <nav class="mobile-nav" id="mobileNav" style="display:none;">
+    <button class="mobile-nav-btn active" onclick="openTool('sql')" id="mnav-sql">
+      <span class="nav-icon">⬡</span>
+      <span>SQL</span>
+    </button>
+    <button class="mobile-nav-btn" onclick="openTool('col')" id="mnav-col">
+      <span class="nav-icon">⌥</span>
+      <span>Column</span>
+    </button>
+    <button class="mobile-nav-btn" onclick="openTool('json')" id="mnav-json">
+      <span class="nav-icon">{ }</span>
+      <span>JSON</span>
+    </button>
+  </nav>
+
 </div>
 
 <script>
+// ═══════════════════════════════════════════════════════
+// Responsive init
+// ═══════════════════════════════════════════════════════
+function isMobile() { return window.innerWidth <= 680; }
+
+function setupNav() {
+  const mobileNav = document.getElementById('mobileNav');
+  mobileNav.style.display = isMobile() ? 'flex' : 'none';
+}
+
+window.addEventListener('resize', setupNav);
+setupNav();
+
 // ═══════════════════════════════════════════════════════
 // Navigation
 // ═══════════════════════════════════════════════════════
 function openTool(id) {
   document.querySelectorAll('.tool-view').forEach(t => t.classList.remove('active'));
   document.querySelectorAll('.tool-btn').forEach(b => b.classList.remove('active'));
+  document.querySelectorAll('.mobile-nav-btn').forEach(b => b.classList.remove('active'));
+
   document.getElementById('tool-' + id).classList.add('active');
-  document.getElementById('nav-' + id).classList.add('active');
+
+  const desktopBtn = document.getElementById('nav-' + id);
+  if (desktopBtn) desktopBtn.classList.add('active');
+
+  const mobileBtn = document.getElementById('mnav-' + id);
+  if (mobileBtn) mobileBtn.classList.add('active');
 }
 
 // ═══════════════════════════════════════════════════════
@@ -901,7 +1077,7 @@ function sqlClear() {
 }
 
 function sqlLoadSample() {
-  sqlInput.value = `WITH monthly_revenue AS (SELECT p.category, FORMAT(s.sale_date,'yyyy-MM') AS sale_month, SUM(s.quantity*s.unit_price) AS revenue, COUNT(DISTINCT s.patient_id) AS unique_patients FROM pharmacy_sales s INNER JOIN products p ON s.product_id=p.id WHERE s.sale_date>=DATEADD(MONTH,-12,GETDATE()) AND s.is_cancelled=0 GROUP BY p.category,FORMAT(s.sale_date,'yyyy-MM')), ranked AS (SELECT *,ROW_NUMBER() OVER (PARTITION BY sale_month ORDER BY revenue DESC) AS rn FROM monthly_revenue) SELECT category,sale_month,revenue,unique_patients,ROUND(revenue/unique_patients,2) AS revenue_per_patient FROM ranked WHERE rn<=5 ORDER BY sale_month DESC,revenue DESC;`;
+  sqlInput.value = `WITH monthly_revenue AS (SELECT p.category, FORMAT(s.sale_date,'yyyy-MM') AS cosmic_cycle, SUM(s.quantity*s.unit_price) AS stellar_energy, COUNT(DISTINCT s.product_id) AS celestial_objects FROM pharmacy_sales s INNER JOIN products p ON s.product_id=p.id WHERE s.sale_date>=DATEADD(MONTH,-12,GETDATE()) AND s.is_cancelled=0 GROUP BY p.category,FORMAT(s.sale_date,'yyyy-MM')), ranked AS (SELECT *,ROW_NUMBER() OVER (PARTITION BY cosmic_cycle ORDER BY stellar_energy DESC) AS rn FROM monthly_revenue) SELECT category AS galaxy_sector,cosmic_cycle,stellar_energy,celestial_objects,ROUND(stellar_energy/NULLIF(celestial_objects,0),2) AS energy_per_object,CASE WHEN stellar_energy>100000 THEN 'Supernova explosion detected' WHEN stellar_energy>50000 THEN 'Star system in equilibrium' WHEN stellar_energy>10000 THEN 'Unstable pulsar activity' ELSE 'Deep space silence' END AS cosmic_status,CASE WHEN celestial_objects=1 THEN 'A lone wandering planet' WHEN celestial_objects<5 THEN 'Sparse asteroid cluster' ELSE 'Dense galaxy formation' END AS formation_state FROM ranked WHERE rn<=5 ORDER BY cosmic_cycle DESC,stellar_energy DESC;`;
   sqlInStat.textContent = `1L · ${sqlInput.value.length}c`;
 }
 
@@ -956,7 +1132,8 @@ function colClear() {
 }
 
 function colLoadSample() {
-  colInput.value = `patient_id\nfirst_name\nlast_name\ndate_of_birth\nward_code\nadmission_date\ndischarge_date`;
+  colInput.value = `star_id\nstar_name\nconstellation_name\nformation_date\nsector_code\ndiscovery_date\ncollapse_date
+`;
   colConvert();
 }
 
@@ -976,7 +1153,6 @@ let formattedJSON = '';
 jsonInput.addEventListener('input', () => {
   const v = jsonInput.value;
   jsonInStat.textContent = v ? `${countLines(v)}L · ${countChars(v)}c` : '—';
-  // live validate
   if (v.trim()) {
     try { JSON.parse(v); jsonErrBar.style.display = 'none'; }
     catch(e) { /* don't spam errors on input */ }
@@ -1064,7 +1240,7 @@ function jsonClear() {
 }
 
 function jsonLoadSample() {
-  jsonInput.value = `{"patients":[{"id":1001,"name":"Rajan Pillai","dob":"1985-04-12","ward":"ICU","active":true,"vitals":{"bp":"120/80","temp":98.6,"spo2":99}},{"id":1002,"name":"Meera Nair","dob":"1990-07-23","ward":"General","active":false,"vitals":{"bp":"110/70","temp":99.1,"spo2":97}}],"total":2,"generated_at":"2025-03-28T10:00:00Z"}`;
+  jsonInput.value = `{"stars":[{"id":1,"name":"Sun","constellation":"N/A","type":"G-type main-sequence","distance_light_years":0,"active":true,"properties":{"surface_temp_K":5778,"mass_solar":1.0,"luminosity_solar":1.0}},{"id":2,"name":"Sirius","constellation":"Canis Major","type":"A-type main-sequence","distance_light_years":8.6,"active":true,"properties":{"surface_temp_K":9940,"mass_solar":2.02,"luminosity_solar":25.4}},{"id":3,"name":"Betelgeuse","constellation":"Orion","type":"Red supergiant","distance_light_years":642.5,"active":true,"properties":{"surface_temp_K":3500,"mass_solar":11.6,"luminosity_solar":126000}},{"id":4,"name":"Proxima Centauri","constellation":"Centaurus","type":"Red dwarf","distance_light_years":4.24,"active":true,"properties":{"surface_temp_K":3042,"mass_solar":0.12,"luminosity_solar":0.0017}}],"total":4,"generated_at":"2026-03-28T10:00:00Z"}`;
   jsonInStat.textContent = `1L · ${jsonInput.value.length}c`;
   jsonRun();
 }
