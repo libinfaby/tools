@@ -12,7 +12,7 @@
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
 :root {
-  --bg:       #0a0a0a;
+  /*--bg:       #0a0a0a;
   --surface:  #111111;
   --surface2: #181818;
   --border:   #222222;
@@ -21,17 +21,35 @@
   --muted:    #555555;
   --muted2:   #3a3a3a;
   --accent:   #e2e2e2;
-  --dim:      #888888;
+  --dim:      #888888;*/
+
+  --bg:       #080d14;
+  --surface:  #0d1a20;
+  --surface2: #112230;
+  --border:   #163028;
+  --border2:  #1e4038;
+  --text:     #c8f0e8;
+  --muted:    #3a6858;
+  --muted2:   #0f2520;
+  --accent:   #2dd4a8;
+  --accent2:  #7b6ef6;
+  --dim:      #7abfaa;
+
   --mono:     'JetBrains Mono', monospace;
   --sans:     'DM Sans', sans-serif;
   --radius:   6px;
 
   /* syntax */
-  --syn-kw:   #a8c0ff;
+  /*--syn-kw:   #a8c0ff;
   --syn-fn:   #ffc799;
   --syn-str:  #b5f0b5;
   --syn-num:  #ffb3ba;
-  --syn-cm:   #444444;
+  --syn-cm:   #444444;*/
+  --syn-kw:   #8bb8f8;
+  --syn-fn:   #f0a875;
+  --syn-str:  #7dd4b8;
+  --syn-num:  #f092a0;
+  --syn-cm:   #2a5545;  
 }
 
 html, body {
@@ -66,7 +84,7 @@ html, body {
 
 .wordmark {
   font-family: var(--mono);
-  font-size: 15px;
+  font-size: 20px;
   font-weight: 400;
   letter-spacing: -0.02em;
   color: var(--dim);
@@ -78,7 +96,7 @@ html, body {
 
 .topbar-meta {
   font-family: var(--mono);
-  font-size: 13px;
+  font-size: 14px;
   color: var(--muted);
 }
 
@@ -97,7 +115,7 @@ html, body {
 
 .sidebar-label {
   font-family: var(--mono);
-  font-size: 12px;
+  font-size: 13px;
   letter-spacing: 0.12em;
   text-transform: uppercase;
   color: var(--muted);
@@ -116,7 +134,7 @@ html, body {
   background: transparent;
   color: var(--dim);
   font-family: var(--sans);
-  font-size: 15px;
+  font-size: 14px;
   font-weight: 400;
   cursor: pointer;
   text-align: left;
@@ -143,7 +161,7 @@ html, body {
   align-items: center;
   justify-content: center;
   flex-shrink: 0;
-  font-size: 15px;
+  font-size: 16px;
   transition: background 0.1s;
 }
 
@@ -155,7 +173,7 @@ html, body {
 .tool-name { font-weight: 400; }
 .tool-tag {
   font-family: var(--mono);
-  font-size: 11px;
+  font-size: 12px;
   color: var(--muted);
   letter-spacing: 0.05em;
   margin-left: auto;
@@ -199,14 +217,14 @@ html, body {
 
 .tool-title h2 {
   font-family: var(--mono);
-  font-size: 15px;
+  font-size: 16px;
   font-weight: 500;
   color: var(--text);
   white-space: nowrap;
 }
 
 .tool-title .desc {
-  font-size: 14px;
+  font-size: 15px;
   color: var(--muted);
   white-space: nowrap;
   overflow: hidden;
@@ -228,7 +246,7 @@ html, body {
   padding: 5px 12px;
   border-radius: var(--radius);
   font-family: var(--mono);
-  font-size: 13px;
+  font-size: 14px;
   font-weight: 400;
   cursor: pointer;
   transition: all 0.1s;
@@ -300,7 +318,7 @@ html, body {
 
 .pane-label {
   font-family: var(--mono);
-  font-size: 12px;
+  font-size: 13px;
   color: var(--muted);
   letter-spacing: 0.1em;
   text-transform: uppercase;
@@ -325,7 +343,7 @@ textarea.code-area {
   outline: none;
   color: var(--text);
   font-family: var(--mono);
-  font-size: 14.5px;
+  font-size: 15.5px;
   line-height: 1.8;
   padding: 14px 16px;
   resize: none;
@@ -340,7 +358,7 @@ textarea.code-area::selection { background: rgba(255,255,255,0.07); }
 
 pre.code-out {
   font-family: var(--mono);
-  font-size: 14.5px;
+  font-size: 15.5px;
   line-height: 1.8;
   padding: 14px 16px;
   white-space: pre-wrap;
@@ -375,7 +393,7 @@ pre.code-out {
 
 .stat {
   font-family: var(--mono);
-  font-size: 12px;
+  font-size: 13px;
   color: var(--muted);
 }
 
@@ -383,7 +401,7 @@ pre.code-out {
 
 .copy-flash {
   font-family: var(--mono);
-  font-size: 12px;
+  font-size: 13px;
   color: var(--dim);
   opacity: 0;
   transition: opacity 0.2s;
@@ -406,7 +424,7 @@ pre.code-out {
 .empty svg { opacity: 0.1; }
 .empty p {
   font-family: var(--mono);
-  font-size: 13px;
+  font-size: 14px;
   color: var(--muted);
   opacity: 0.6;
 }
@@ -431,7 +449,7 @@ select.opt-select, input.opt-input {
   border: 1px solid var(--border2);
   color: var(--dim);
   font-family: var(--mono);
-  font-size: 13px;
+  font-size: 14px;
   padding: 3px 8px;
   border-radius: 4px;
   outline: none;
@@ -448,7 +466,7 @@ select.opt-select option { background: #1a1a1a; }
 
 .opt-label {
   font-family: var(--mono);
-  font-size: 12px;
+  font-size: 13px;
   color: var(--muted);
   white-space: nowrap;
   flex-shrink: 0;
@@ -475,7 +493,7 @@ select.opt-select option { background: #1a1a1a; }
 .col-section { display: flex; flex-direction: column; gap: 8px; }
 .col-section label {
   font-family: var(--mono);
-  font-size: 12px;
+  font-size: 13px;
   color: var(--muted);
   letter-spacing: 0.08em;
   text-transform: uppercase;
@@ -489,7 +507,7 @@ textarea.col-area {
   border-radius: var(--radius);
   color: var(--text);
   font-family: var(--mono);
-  font-size: 14.5px;
+  font-size: 15.5px;
   line-height: 1.8;
   padding: 12px;
   resize: none;
@@ -518,7 +536,7 @@ textarea.col-area:focus { border-color: var(--border2); }
 
 .col-option label {
   font-family: var(--mono);
-  font-size: 12px;
+  font-size: 13px;
   color: var(--muted);
   text-transform: uppercase;
   letter-spacing: 0.08em;
@@ -531,7 +549,7 @@ input.opt-text {
   border-radius: 4px;
   color: var(--text);
   font-family: var(--mono);
-  font-size: 13px;
+  font-size: 14px;
   padding: 4px 8px;
   outline: none;
   width: 120px;
@@ -543,7 +561,7 @@ input.opt-text:focus { border-color: var(--border2); }
 /* ── JSON tool ── */
 .json-error {
   font-family: var(--mono);
-  font-size: 13px;
+  font-size: 14px;
   color: #ff9999;
   padding: 8px 14px;
   border-top: 1px solid #2a1a1a;
@@ -562,7 +580,7 @@ input.opt-text:focus { border-color: var(--border2); }
 /* ── Keyboard hint ── */
 .kbd {
   font-family: var(--mono);
-  font-size: 12px;
+  font-size: 13px;
   color: var(--muted);
   border: 1px solid var(--border2);
   border-radius: 3px;
@@ -619,7 +637,7 @@ input.opt-text:focus { border-color: var(--border2); }
     border: none;
     color: var(--muted);
     font-family: var(--mono);
-    font-size: 11px;
+    font-size: 12px;
     cursor: pointer;
     -webkit-tap-highlight-color: transparent;
     transition: color 0.1s;
@@ -633,7 +651,7 @@ input.opt-text:focus { border-color: var(--border2); }
   }
 
   .mobile-nav-btn .nav-icon {
-    font-size: 17px;
+    font-size: 16px;
     line-height: 1;
   }
 
@@ -687,7 +705,7 @@ input.opt-text:focus { border-color: var(--border2); }
   }
   .btn {
     padding: 5px 9px;
-    font-size: 12px;
+    font-size: 13px;
   }
 }
 </style>
@@ -740,7 +758,7 @@ input.opt-text:focus { border-color: var(--border2); }
           <span class="desc">Format & beautify SQL queries</span>
         </div>
         <div class="header-actions">
-          <span class="kbd">⌘↵</span>
+          <!-- <span class="kbd">⌘↵</span> -->
           <button class="btn" onclick="sqlLoadSample()">Sample</button>
           <button class="btn" onclick="sqlClear()">Clear</button>
           <button class="btn btn-primary" id="sqlRunBtn" onclick="sqlRun()">Format</button>
@@ -748,7 +766,7 @@ input.opt-text:focus { border-color: var(--border2); }
       </div>
 
       <div class="options-strip">
-        <span class="opt-label">Dialect</span>
+        <span class="opt-label">Format</span>
         <select class="opt-select" id="sqlDialect">
           <option value="tsql" selected>MS SQL</option>
           <option value="postgresql">PostgreSQL</option>
@@ -764,7 +782,7 @@ input.opt-text:focus { border-color: var(--border2); }
           <option value="4">4 Spaces</option>
         </select>
         <div class="opt-sep"></div>
-        <span class="opt-label">KW</span>
+        <span class="opt-label">Case</span>
         <select class="opt-select" id="sqlCase">
           <option value="upper">UPPERCASE</option>
           <option value="lower">lowercase</option>
@@ -845,18 +863,18 @@ input.opt-text:focus { border-color: var(--border2); }
             <div class="col-option">
               <label>Wrap with</label>
               <input class="opt-text" id="colWrapL" value="'" placeholder="prefix" style="width:52px;" oninput="colConvert()">
-              <span style="font-family:var(--mono);font-size:13px;color:var(--muted)">···</span>
+              <span style="font-family:var(--mono);font-size:14px;color:var(--muted)">···</span>
               <input class="opt-text" id="colWrapR" value="'" placeholder="suffix" style="width:52px;" oninput="colConvert()">
             </div>
             <div class="col-option">
               <label>Trim</label>
               <input type="checkbox" id="colTrim" checked onchange="colConvert()" style="accent-color:#888;">
-              <span style="font-family:var(--mono);font-size:13px;color:var(--muted);">trim whitespace</span>
+              <span style="font-family:var(--mono);font-size:14px;color:var(--muted);">trim whitespace</span>
             </div>
             <div class="col-option">
               <label>Skip empty</label>
               <input type="checkbox" id="colSkipEmpty" checked onchange="colConvert()" style="accent-color:#888;">
-              <span style="font-family:var(--mono);font-size:13px;color:var(--muted);">skip blank lines</span>
+              <span style="font-family:var(--mono);font-size:14px;color:var(--muted);">skip blank lines</span>
             </div>
           </div>
 
@@ -884,7 +902,7 @@ input.opt-text:focus { border-color: var(--border2); }
           <span class="desc">Validate, format & highlight JSON</span>
         </div>
         <div class="header-actions">
-          <span class="kbd">⌘↵</span>
+          <!-- <span class="kbd">⌘↵</span> -->
           <button class="btn" onclick="jsonLoadSample()">Sample</button>
           <button class="btn" onclick="jsonClear()">Clear</button>
           <button class="btn btn-primary" onclick="jsonRun()">Format</button>
